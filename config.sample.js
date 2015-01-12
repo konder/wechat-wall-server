@@ -6,8 +6,5 @@
 
 module.exports = {
     port: 3000,
-    appid: '',
-    secret: '',
-    agentid: '',
     wechatapi: ''
 }
