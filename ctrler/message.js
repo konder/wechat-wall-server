@@ -34,6 +34,7 @@ exports.add = function (_message) {
         userid: _message.FromUserName,
         author: getUser(_message.FromUserName),
         content: _message.Content,
+        image: _message.PicUrl,
         time: _message.CreateTime
     });
 }
