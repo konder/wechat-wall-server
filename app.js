@@ -13,7 +13,9 @@ var config = require('./config');
 
 var shakeRouter = require('./routes/shake');
 var messageRouter = require('./routes/message');
-
+var wechat = require('./routes/wechat');
+var oauth = require('./routes/oauth');
+var user = require('./routes/user');
 var app = express();
 
 // all environments
@@ -34,7 +36,9 @@ if ('development' == app.get('env')) {
 
 app.use('/shake', shakeRouter);
 app.use('/message', messageRouter);
-
+app.use('/wechat', wechat);
+app.use('/oauth', oauth);
+app.use('/user', user);
 var server = app.listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
 });

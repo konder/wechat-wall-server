@@ -1,25 +1,28 @@
 var http = require('http');
 var config = require('../config');
-
 var users = {};
+var guys = [];
 var message = [];
 
 var getUser = function (_userid) {
     if (!users[_userid]) {
         // 在没有加载完，使用默认值填充
         users[_userid] = {'userid': _userid};
-
-        http.get(config.wechatapi + '/user/' + _userid, function (res) {
+        var wx_user_api = config.wechat.api.user_info + '?access_token=' +
+            config.wechat.access_token + '&lang=zh_CN&openid=' + _userid;
+        http.get(wx_user_api, function (res) {
             var json = '';
             res.on('data', function (chunk) {
                 json += chunk;
             }).on('end', function () {
                 var _u = json && JSON.parse(json);
-                _u && _u['errmsg'] == 'ok' && (users[_userid] = {
-                    userid: _u.userid,
-                    name: _u.name,
-                    gender: _u.gender,
-                    avatar: _u.avatar
+                //var gay = {openid: _u.openid, nickname: _u.nickname, avatar: _u.headimgurl};
+                //guys.push(gay);
+                _u && !_u['errcode'] && (users[_userid] = {
+                    userid: _u.openid,
+                    name: _u.nickname,
+                    gender: _u.sex,
+                    avatar: _u.headimgurl
                 });
             })
         }).on('error', function (e) {
@@ -28,6 +31,25 @@ var getUser = function (_userid) {
     }
     return users[_userid];
 };
+
+exports.addUser = function (_u) {
+    var _userid = _u.openid;
+    if (!users[_userid]) {
+        var gay = {openid: _u.openid, nickname: _u.nickname, avatar: _u.headimgurl};
+        guys.push(gay);
+        _u && !_u['errcode'] && (users[_userid] = {
+            userid: _u.openid,
+            name: _u.nickname,
+            gender: _u.sex,
+            avatar: _u.headimgurl
+        });
+    }
+}
+
+exports.all = function () {
+    console.log(guys);
+    return guys;
+}
 
 exports.add = function (_message) {
     message.push({
@@ -41,7 +63,7 @@ exports.add = function (_message) {
 
 exports.fetch = function () {
     var _oldMessage = [];
-    message.forEach(function(e){
+    message.forEach(function (e) {
         e.author = getUser(e.userid);
         _oldMessage.push(e);
     });

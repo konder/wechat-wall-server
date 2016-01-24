@@ -9,13 +9,13 @@ router.use(function timeLog(req, res, next) {
     next();
 })
 
-router.post('/', function(req, res) {
+router.post('/', function (req, res) {
     message.add(req.body);
     res.send('ok');
 });
 
-router.get('/', function(req, res) {
-    res.send(message.fetch());
+router.get('/', function (req, res) {
+    res.jsonp(message.fetch());
 });
 
 module.exports = router;
