@@ -9,6 +9,11 @@ var qr = require('qr-image');
 router.get('/login', function (req, res) {
     var code = req.query.code;
     client.getAccessToken(code, function (err, result) {
+        console.log(result.data);
+        if (!result.data) {
+            res.send('error');
+            return;
+        }
         var openid = result.data.openid;
         client.getUser(openid, function (err, result) {
             var userInfo = result;

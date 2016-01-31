@@ -10,6 +10,10 @@ var config = {
     encodingAESKey: 'encodinAESKey'
 };
 
+router.get('/token', function (req, res) {
+    res.send(messageService.setAccessToken());
+});
+
 router.use('/', wechat(config.token, wechat.text(function (message, req, res, next) {
     messageService.add(message);
     res.reply('消息上墙啦~！');
@@ -18,4 +22,7 @@ router.use('/', wechat(config.token, wechat.text(function (message, req, res, ne
     messageService.add(message);
     res.reply('消息上墙啦~！');
 })));
+
+
+
 module.exports = router;
