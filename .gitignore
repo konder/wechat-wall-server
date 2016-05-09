@@ -48,4 +48,4 @@ crashlytics.properties
 crashlytics-build.properties
 
 config.js
-
+node_modules/
